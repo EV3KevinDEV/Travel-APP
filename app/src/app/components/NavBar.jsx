@@ -1,10 +1,8 @@
-'use client'
+import Link from "next/link";
 
-import Link from 'next/link'
-
-export function AppComponentsNavbar() {
+export function NavBar() {
   return (
-    <nav className="bg-blue-500 p-4">
+    <div className="bg-blue-500 p-4">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-white text-2xl font-bold">
           Travito
@@ -24,6 +22,8 @@ export function AppComponentsNavbar() {
           </Link>
         </div>
       </div>
-    </nav>
-  )
+    </div>
+  );
 }
+
+export default NavBar;

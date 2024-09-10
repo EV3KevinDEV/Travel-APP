@@ -6,7 +6,7 @@ export default function Home() {
       <div className="text-center">
 
         {/* <!-- Welcome Section --> */}
-        <section className="text-center my-12">
+        <section className="text-center my-6">
           <h2 className="text-4xl font-bold mb-4">Welcome to Travito</h2>
           <p className="text-xl mb-8 text-gray-700">Your all-in-one travel companion</p>
         </section>

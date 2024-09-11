@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
   return (
     <>
       <div className="text-center">
-
         {/* <!-- Welcome Section --> */}
         <section className="text-center my-12">
           <h2 className="text-4xl font-bold mb-4">Welcome to Travito</h2>
@@ -90,6 +90,17 @@ export default function Home() {
               <p className="mt-2 text-gray-600">Discover the best local experiences</p>
             </div>
           </a>
+        </section>
+
+        {/* <!-- Add Sign-Up and Sign-In Links --> */}
+        <section className="text-center my-12">
+          <Link to="/signup" className="text-blue-500 hover:text-blue-700">
+            Create an Account
+          </Link>
+          <span className="mx-2">|</span>
+          <Link to="/signin" className="text-blue-500 hover:text-blue-700">
+            Sign In
+          </Link>
         </section>
       </div>
     </>

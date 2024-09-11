@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
+import Link from "next/link";
 
 export default function Home() {
   return (
     <>
       <div className="text-center">
-
         {/* <!-- Welcome Section --> */}
-        <section className="text-center my-6">
+        <section className="text-center my-12">
           <h2 className="text-4xl font-bold mb-4">Welcome to Travito</h2>
           <p className="text-xl mb-8 text-gray-700">Your all-in-one travel companion</p>
         </section>
@@ -90,6 +90,17 @@ export default function Home() {
               <p className="mt-2 text-gray-600">Discover the best local experiences</p>
             </div>
           </a>
+        </section>
+
+        {/* <!-- Add Sign-Up and Sign-In Links --> */}
+        <section className="text-center my-12">
+          <Link href="/signup" className="text-blue-500 hover:text-blue-700">
+            Create an Account
+          </Link>
+          <span className="mx-2">|</span>
+          <Link href="/signin" className="text-blue-500 hover:text-blue-700">
+            Sign In
+          </Link>
         </section>
       </div>
     </>

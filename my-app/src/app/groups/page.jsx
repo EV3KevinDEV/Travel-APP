@@ -1,27 +1,43 @@
-import React from "react";
+// Page.js
+
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // Next.js 13+ useRouter import
 
 export default function Page() {
-  const groups = [
-    {
-      id: 1,
-      name: "Summer Vacation 2023",
-      members: 5,
-      destination: "Bali, Indonesia",
-    },
-    {
-      id: 2,
-      name: "City Break: Paris",
-      members: 3,
-      destination: "Paris, France",
-    },
-    {
-      id: 3,
-      name: "Hiking Trip",
-      members: 4,
-      destination: "Rocky Mountains, USA",
-    },
-  ];
+  const [groups, setGroups] = useState([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.push("/signin");
+    } else {
+      fetchGroups(token);
+    }
+  }, []);
+
+  const fetchGroups = async (token) => {
+    try {
+      const response = await fetch("http://localhost:5000/groups", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setGroups(data);
+      } else {
+        // Handle unauthorized access
+        router.push("/signin");
+      }
+    } catch (error) {
+      console.error("Error fetching groups:", error);
+    }
+  };
 
   return (
     <div>
@@ -32,7 +48,7 @@ export default function Page() {
             <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow">
               <h2 className="text-xl font-semibold mb-2">{group.name}</h2>
               <p className="text-gray-600 mb-2">{group.destination}</p>
-              <p>{group.members} members</p>
+              <p>{group.members.length} members</p>
             </div>
           </Link>
         ))}

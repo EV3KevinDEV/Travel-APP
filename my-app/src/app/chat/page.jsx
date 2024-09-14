@@ -1,53 +1,63 @@
+// Chat.js
+
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router"; // assuming you're using Next.js for routing
+import { useRouter } from "next/navigation"; // Next.js 13+ useRouter import
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [username, setUsername] = useState("");
+  const router = useRouter();
 
-  // Check for logged-in status when the component mounts
   useEffect(() => {
     const loggedInUser = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
 
-    if (!loggedInUser) {
-      // If no user is logged in, redirect to login or signup
-      router.push("/login");
+    if (!loggedInUser || !token) {
+      router.push("/signin");
     } else {
       setUsername(loggedInUser);
-      fetchMessages(); // Fetch messages once authenticated
+      fetchMessages(token);
     }
   }, []);
 
-  // Fetch chat messages from the backend
-  const fetchMessages = async () => {
+  const fetchMessages = async (token) => {
     try {
-      const response = await fetch("http://localhost:5000/chat");
-      const data = await response.json();
-      setMessages(data);
+      const response = await fetch("http://localhost:5000/chat", {
+        headers: {
+          Authorization: token,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data);
+      } else {
+        // Handle unauthorized access
+        router.push("/signin");
+      }
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
 
-  // Handle sending the message to the backend
   const handleSendMessage = async () => {
+    const token = localStorage.getItem("token");
     if (newMessage.trim() !== "" && username) {
-      const messageData = { sender: username, content: newMessage };
       try {
         const response = await fetch("http://localhost:5000/chat", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: token,
           },
-          body: JSON.stringify(messageData),
+          body: JSON.stringify({ content: newMessage }),
         });
         if (response.ok) {
           const newMsg = await response.json();
-          setMessages([...messages, newMsg]); // Update messages with the new one
-          setNewMessage(""); // Clear the input field
+          setMessages([...messages, newMsg]);
+          setNewMessage("");
         } else {
           console.error("Failed to send message");
         }
@@ -63,7 +73,7 @@ export default function Chat() {
       <div className="bg-white shadow-md rounded-lg p-6">
         <div className="space-y-4 mb-4 h-96 overflow-y-auto">
           {messages.map((message) => (
-            <div key={message._id} className="bg-gray-100 p-3 rounded-lg">
+            <div key={message.id} className="bg-gray-100 p-3 rounded-lg">
               <span className="font-semibold">{message.sender}: </span>
               {message.content}
             </div>
